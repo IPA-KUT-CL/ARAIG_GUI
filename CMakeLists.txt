@@ -119,16 +119,18 @@ catkin_package(
 
 set (araig_test_gui_SRCS
   src/araig_test_gui/my_plugin.cpp
+  src/araig_test_gui/tablemodel.cpp
 )
 
 set(araig_test_gui_HDRS
   include/araig_test_gui/my_plugin.h
+  include/araig_test_gui/tablemodel.h
 )
 
 set(araig_test_gui_UIS
   src/araig_test_gui/my_plugin.ui
 )
-
+# changed _MOCS for _SRCS
 if("${qt_gui_cpp_USE_QT_MAJOR_VERSION} " STREQUAL "5 ")
   qt5_wrap_cpp(araig_test_gui_MOCS ${araig_test_gui_HDRS})
   qt5_wrap_ui(araig_test_gui_UIS_H ${araig_test_gui_UIS})
@@ -148,8 +150,9 @@ include_directories(
   # TODO(lucasw) This is needed for generated headers, but catkin lint doesn't like it
   ${CMAKE_CURRENT_BINARY_DIR}/..
   ${catkin_INCLUDE_DIRS}
+  include/araig_test_gui/
 )
-
+# changed MOCS for HDRS
 ## Declare a cpp library
 add_library(${PROJECT_NAME}
     ${araig_test_gui_SRCS}
@@ -158,7 +161,8 @@ add_library(${PROJECT_NAME}
     )
 
 ## Declare a C++ executable
-# add_executable(rqt_example_cpp_node src/rqt_example_cpp_node.cpp)
+add_executable(test_node src/test.cpp)
+target_link_libraries(test_node ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above

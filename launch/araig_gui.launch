@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg="araig_test_gui" type="my_plugin" name="GUI">
-        <remap from="/araig_test_gui/start_test" to="begin"/>
-        <remap from="/topic" to="/araig_test_gui/stop_test"/>
+    <node pkg="araig_test_gui" type="my_plugin" name="GUI" output="screen">
+    </node>
+    <node pkg="araig_test_gui" type="test_node" name="test_node" output="screen">
     </node>
 </launch>

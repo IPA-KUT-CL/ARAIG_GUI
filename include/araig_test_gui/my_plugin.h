@@ -40,7 +40,7 @@ protected:
   std::vector<ros::Publisher> input_pubs_;
   std::vector<ros::Subscriber> output_subs_;
 private:
-  int init_flag = 0;
+  bool test_ready = false;
   const int _NUM_INPUTS_ = 4;
   const int _NUM_OUTPUTS_ = 2;
   std::vector<std::string> _NAME_INPUTS_;
@@ -55,7 +55,7 @@ public:
   void spawnSubs();
   int getIndexInVector(std::vector<std::string> vec, std::string topicName);
   void pubPublish(int idx);
-  void testReset();
+  void stateInit();
 
 
 private slots:

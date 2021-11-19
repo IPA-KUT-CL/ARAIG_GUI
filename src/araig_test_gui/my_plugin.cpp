@@ -9,6 +9,8 @@
 #include <ros/master.h>
 #include "nodelet/nodelet.h"
 #include "std_msgs/Bool.h"
+#include <QTableView>
+#include "tablemodel.h"
 
 namespace araig_test_gui
 {
@@ -31,6 +33,7 @@ void MyPlugin::initPlugin(qt_gui_cpp::PluginContext& context)
   widget_ = new QWidget();
   // extend the widget with all attributes and children from UI file
 
+
   ui_.setupUi(widget_);
   // add widget to the user interface
   context.addWidget(widget_);
@@ -39,6 +42,9 @@ void MyPlugin::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.pbTestReset, SIGNAL(clicked()), this, SLOT(on_pbTestReset_clicked()));
   connect(ui_.pbTestSucc, SIGNAL(clicked()), this, SLOT(on_pbTestSucc_clicked()));
   connect(ui_.pbTestFail, SIGNAL(clicked()), this, SLOT(on_pbTestFail_clicked()));
+  TableModel tableModel;
+  ui_.table_view->setModel(&tableModel);
+
 
   nh = getNodeHandle();
   _NAME_INPUTS_ = {"start_test", "stop_test", "reset_test", "test_successful"};
@@ -49,8 +55,8 @@ void MyPlugin::initPlugin(qt_gui_cpp::PluginContext& context)
   output_states.resize(_NUM_OUTPUTS_);
   spawnPubs();
   spawnSubs();
-  testReset();
-  ROS_INFO_STREAM("ARAIG_TEST_GUI initialized!");
+  stateInit();
+  ROS_INFO_STREAM("GUI: ARAIG_TEST_GUI initialized!");
 
 }
 
@@ -77,7 +83,7 @@ void MyPlugin::spawnPubs()
   {
     std::string topicName = _NAME_INPUTS_[i];
     input_pubs_[i] = nh.advertise<std_msgs::Bool>(topicName, 10);
-    ROS_INFO_STREAM("Spawned input topic publisher " << i << " for : " << topicName);
+    ROS_INFO_STREAM("GUI: Spawned input topic publisher " << i << " for : " << topicName);
   }
 }
 
@@ -87,7 +93,7 @@ void MyPlugin::spawnSubs()
   {
     std::string topicName = _NAME_OUTPUTS_[i];
     output_subs_[i] = nh.subscribe<std_msgs::Bool>(topicName, 10, boost::bind(&MyPlugin::callbackBool, this, _1, topicName));
-    ROS_INFO_STREAM("Spawned output topic subscriber " << i << " for : " << topicName);
+    ROS_INFO_STREAM("GUI: Spawned output topic subscriber " << i << " for : " << topicName);
   }
 }
 
@@ -106,7 +112,7 @@ int MyPlugin::getIndexInVector(std::vector<std::string> vec, std::string topicNa
 
 void MyPlugin::callbackBool(const std_msgs::BoolConstPtr& msg, const std::string &topicName)
 {
-  ROS_INFO_STREAM("get data on topic" + topicName);
+  ROS_INFO_STREAM("GUI: get data on topic " + topicName);
   int idx = getIndexInVector(_NAME_OUTPUTS_, topicName);
   if(idx !=-1){
     output_states[idx] = msg->data? true:false;
@@ -117,26 +123,30 @@ void MyPlugin::callbackBool(const std_msgs::BoolConstPtr& msg, const std::string
 
 void MyPlugin::outputTestState()
 {
-  if(!init_flag)
-  {
+  bool running = output_states[0];
+  bool succ = output_states[1];
+
+  if(running==1 && test_ready==0){
+    ui_.lbTestState->setText("Test running!");
+    ui_.lbTestResult->setText("Waiting for result");
+  }
+  else if(running==0 && test_ready==0){
+    if(succ==0){
+      ui_.lbTestState->setText("Test stopped!");
+      ui_.lbTestResult->setText("Test failed!");
+    }
+    else {
+      ui_.lbTestState->setText("Test stopped!");
+      ui_.lbTestResult->setText("Test succeeded!");
+    }
+  }
+  else if (running==0 && test_ready==1) {
     ui_.lbTestState->setText("Test ready!");
     ui_.lbTestResult->setText("Wait for start!");
   }
   else {
-    if(output_states[0])
-    {
-      ui_.lbTestState->setText("Test running!");
-    }
-    else{
-      ui_.lbTestState->setText("Test stopped!");
-    }
-    if(output_states[1])
-    {
-      ui_.lbTestResult->setText("Test successful!");
-    }
-    else{
-      ui_.lbTestResult->setText("Test failed!");
-    }
+    ui_.lbTestState->setText("Please reset!");
+    ui_.lbTestResult->setText(" ");
   }
 }
 
@@ -148,14 +158,15 @@ void MyPlugin::pubPublish(int idx)
   ros::spinOnce();
 }
 
-void MyPlugin::testReset()
+void MyPlugin::stateInit()
 {
-  init_flag = 0;
-  outputTestState();
   for (auto it = output_states.begin();it!=output_states.end();it++) {
     *it = false;
   }
-  init_flag = 1;
+  for (auto it = input_states.begin();it!=input_states.end();it++) {
+    *it = false;
+  }
+  test_ready = true;
 }
 
 }  // namespace araig_test_gui
@@ -164,35 +175,47 @@ PLUGINLIB_EXPORT_CLASS(araig_test_gui::MyPlugin, rqt_gui_cpp::Plugin)
 void araig_test_gui::MyPlugin::on_pbTestStart_clicked()
 {
   input_states[0] = true;
+  input_states[1] = false;
+  input_states[2] = false;
   pubPublish(0);
-  ROS_INFO_STREAM("test started!");
+  ROS_INFO_STREAM("GUI: test started!");
+  test_ready = false;
+  outputTestState();
 }
 
 void araig_test_gui::MyPlugin::on_pbTestStop_clicked()
 {
+  input_states[0] = false;
   input_states[1] = true;
+  input_states[2] = false;
   pubPublish(1);
-  ROS_INFO_STREAM("test stopped!");
+  ROS_INFO_STREAM("GUI: test stopped!");
+  outputTestState();
 }
 
 void araig_test_gui::MyPlugin::on_pbTestReset_clicked()
 {
-  testReset();
+  stateInit();
+  input_states[0] = false;
+  input_states[1] = false;
   input_states[2] = true;
   pubPublish(2);
-  ROS_INFO_STREAM("test reseted!");
+  ROS_INFO_STREAM("GUI: test reseted!");
+  outputTestState();
 }
 
 void araig_test_gui::MyPlugin::on_pbTestSucc_clicked()
 {
   input_states[3] = true;
   pubPublish(3);
-  ROS_INFO_STREAM("test succeeded!");
+  ROS_INFO_STREAM("GUI: test succeeded!");
+  outputTestState();
 }
 
 void araig_test_gui::MyPlugin::on_pbTestFail_clicked()
 {
   input_states[3] = false;
   pubPublish(3);
-  ROS_INFO_STREAM("test failed!");
+  ROS_INFO_STREAM("GUI: test failed!");
+  outputTestState();
 }
