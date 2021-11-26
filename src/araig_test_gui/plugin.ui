@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MyPluginWidget</class>
+ <widget class="QWidget" name="MyPluginWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>822</width>
+      <height>575</height>
+     </rect>
+    </property>
+    <property name="windowTitle">
+     <string>Test1</string>
+    </property>
+    <widget class="QWidget" name="centralWidget">
+     <widget class="QGroupBox" name="gpTestControl">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>60</y>
+        <width>191</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Test Control</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>40</y>
+         <width>101</width>
+         <height>191</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="pbsTestControl">
+        <item>
+         <widget class="QPushButton" name="pbTestStart">
+          <property name="text">
+           <string>Start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbTestStop">
+          <property name="text">
+           <string>Stop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbTestReset">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>60</y>
+        <width>271</width>
+        <height>421</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="gpRobotState">
+         <property name="title">
+          <string>Robot State</string>
+         </property>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>60</y>
+            <width>141</width>
+            <height>91</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="rbsRobotState">
+           <item>
+            <widget class="QRadioButton" name="rbRobotRunning">
+             <property name="text">
+              <string>Running</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rbRobotStopped">
+             <property name="text">
+              <string>Stopped</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gpTestState">
+         <property name="title">
+          <string>Test State</string>
+         </property>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>120</y>
+            <width>151</width>
+            <height>81</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="rbsTestResult">
+           <item>
+            <widget class="QRadioButton" name="rbTestSucceeded">
+             <property name="text">
+              <string>Successed</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rbTestFailed">
+             <property name="text">
+              <string>Failed</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>40</y>
+            <width>122</width>
+            <height>63</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="rbsTestProgress">
+           <item>
+            <widget class="QRadioButton" name="rbTestOn">
+             <property name="text">
+              <string>On</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rbTestComplete">
+             <property name="text">
+              <string>Completed</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QMenuBar" name="menuBar">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>822</width>
+       <height>26</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QToolBar" name="mainToolBar">
+     <attribute name="toolBarArea">
+      <enum>TopToolBarArea</enum>
+     </attribute>
+     <attribute name="toolBarBreak">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+    <widget class="QStatusBar" name="statusBar"/>
+   </widget>
+ <resources/>
+ <connections/>
+</ui>

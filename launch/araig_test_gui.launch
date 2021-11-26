@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="araig_test_gui" type="araig_test_gui" name="gui_node"/>        
+</launch>
