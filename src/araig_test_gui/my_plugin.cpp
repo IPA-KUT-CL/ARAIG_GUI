@@ -9,6 +9,7 @@
 #include <ros/master.h>
 #include "nodelet/nodelet.h"
 #include "std_msgs/Bool.h"
+#include <QApplication>
 #include <QTableView>
 #include "tablemodel.h"
 
@@ -44,7 +45,7 @@ void MyPlugin::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.pbTestFail, SIGNAL(clicked()), this, SLOT(on_pbTestFail_clicked()));
   TableModel tableModel;
   ui_.table_view->setModel(&tableModel);
-
+  ui_.table_view->show();
 
   nh = getNodeHandle();
   _NAME_INPUTS_ = {"start_test", "stop_test", "reset_test", "test_successful"};

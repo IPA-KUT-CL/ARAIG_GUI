@@ -199,6 +199,9 @@
     </widget>
    </widget>
    <widget class="QTableView" name="table_view">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>390</x>
