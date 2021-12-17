@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg="araig_test_gui" type="my_plugin" name="GUI">
-        <remap from="/araig_test_gui/start_test" to="begin"/>
-        <remap from="/topic" to="/araig_test_gui/stop_test"/>
-    </node>
+    <node pkg="araig_gui" type="araig_gui" name="gui_node" output="screen"/>
+
+    <node pkg="araig_gui" type="test_araig_gui.py" name="test_node" output="screen"/>
 </launch>
