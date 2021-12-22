@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(araig_gui)
+project(araig_gui_stand_alone)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp

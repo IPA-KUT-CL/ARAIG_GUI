@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>araig_gui</name>
+  <name>araig_gui_stand_alone</name>
   <version>0.0.1</version>
   <description>The GUI for araig tests</description>
   <maintainer email="changxuan.li@ipa.fraunhofer.de">Changxuan Li</maintainer>
